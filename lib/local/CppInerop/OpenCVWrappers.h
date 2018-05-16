@@ -250,6 +250,16 @@ namespace OpenCVWrappers {
 
 		}
 
+		VideoWriter(System::String^ location, int width, int height, double fps, bool colour, int fourcc)
+		{
+
+			msclr::interop::marshal_context context;
+			std::string location_std_string = context.marshal_as<std::string>(location);
+
+			vc = new cv::VideoWriter(location_std_string, fourcc, fps, cv::Size(width, height), colour);
+
+		}
+
 		// Return success
 		bool Write(RawImage^ img)
 		{

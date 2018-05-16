@@ -133,6 +133,19 @@ namespace UtilitiesOF {
 			}
 		}
 
+		// Can provide a webcam id
+		SequenceReader(int webcam_id, int width, int height, float fps)
+		{
+			m_sequence_capture = new Utilities::SequenceCapture();
+
+			bool success = m_sequence_capture->OpenWebcam(webcam_id, width, height, -1, -1, -1, -1, fps);
+
+			if (!success)
+			{
+				throw gcnew ReadingFailedException("Failed to open an image sequence");
+			}
+		}
+
 		SequenceReader(int webcam_id, int width, int height, float fx, float fy, float cx, float cy)
 		{
 			m_sequence_capture = new Utilities::SequenceCapture();

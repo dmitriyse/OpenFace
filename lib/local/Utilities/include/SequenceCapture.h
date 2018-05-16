@@ -66,7 +66,7 @@ namespace Utilities
 		// Direct opening
 
 		// Webcam
-		bool OpenWebcam(int device_id, int image_width = 640, int image_height = 480, float fx = -1, float fy = -1, float cx = -1, float cy = -1);
+		bool OpenWebcam(int device_id, int image_width = 640, int image_height = 480, float fx = -1, float fy = -1, float cx = -1, float cy = -1, float fps = -1);
 
 		// Image sequence in the directory
 		bool OpenImageSequence(std::string directory, float fx = -1, float fy = -1, float cx = -1, float cy = -1);

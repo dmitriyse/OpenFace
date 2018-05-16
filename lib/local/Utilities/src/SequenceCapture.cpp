@@ -214,7 +214,7 @@ const std::string currentDateTime()
 }
 
 
-bool SequenceCapture::OpenWebcam(int device, int image_width, int image_height, float fx, float fy, float cx, float cy)
+bool SequenceCapture::OpenWebcam(int device, int image_width, int image_height, float fx, float fy, float cx, float cy, float fps)
 {
 	INFO_STREAM("Attempting to read from webcam: " << device);
 
@@ -234,6 +234,11 @@ bool SequenceCapture::OpenWebcam(int device, int image_width, int image_height, 
 	capture.open(device);
 	capture.set(CV_CAP_PROP_FRAME_WIDTH, image_width);
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT, image_height);
+	
+	if (fps != -1) 
+	{
+		capture.set(CV_CAP_PROP_FPS, fps);
+	}
 
 	is_webcam = true;
 	is_image_seq = false;
@@ -257,10 +262,10 @@ bool SequenceCapture::OpenWebcam(int device, int image_width, int image_height, 
 	this->fps = capture.get(CV_CAP_PROP_FPS);
 
 	// Check if fps is nan or less than 0
-	if (fps != fps || fps <= 0)
+	if (this->fps != this->fps || this->fps <= 0)
 	{
 		INFO_STREAM("FPS of the webcam cannot be determined, assuming 30");
-		fps = 30;
+		this->fps = 30;
 	}
 
 	SetCameraIntrinsics(fx, fy, cx, cy);
