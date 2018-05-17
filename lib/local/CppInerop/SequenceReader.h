@@ -344,6 +344,44 @@ namespace UtilitiesOF {
 
 		// A utility for listing the currently connected cameras together with their ID, name, subset of supported resolutions and a thumbnail
 	public:
+		static List<System::Tuple<int, int>^>^ CoerceResolutions(int cameraId, List<System::Tuple<int,int>^>^ resolutions) 
+		{
+			cv::VideoCapture cap(cameraId);
+			auto result = gcnew List<System::Tuple<int, int>^>();
+			for (size_t i = 0; i < resolutions->Count; i++)
+			{
+				cap.set(CV_CAP_PROP_FRAME_WIDTH, resolutions[i]->Item1);
+				cap.set(CV_CAP_PROP_FRAME_HEIGHT, resolutions[i]->Item2);
+
+				int set_width = cap.get(CV_CAP_PROP_FRAME_WIDTH);
+				int set_height = cap.get(CV_CAP_PROP_FRAME_HEIGHT);
+
+				result->Add(gcnew System::Tuple<int, int>(set_width, set_height));
+			}
+			return result;
+		}
+
+		static Dictionary<int, System::String^>^ GetCameraNames() 
+		{
+			DeviceEnumerator de;
+
+			// Get a listing of all connected video devices
+			std::map<int, Device> cameras = de.getVideoDevicesMap();
+
+			auto result = gcnew Dictionary<int, System::String^>();
+
+			size_t num_cameras = cameras.size();
+
+			for (size_t i = 0; i < num_cameras; ++i) {
+
+				std::string device_name = cameras[i].deviceName;
+				System::String^ device_name_m = gcnew System::String(device_name.c_str());
+				result->Add(i, device_name_m);
+			}
+
+			return result;
+		}
+
 		static List<System::Tuple<int, System::String^, List<System::Tuple<int, int>^>^, OpenCVWrappers::RawImage^>^>^ GetCameras(System::String^ root_directory_m)
 		{
 			auto managed_camera_list = gcnew List<System::Tuple<int, System::String^, List<System::Tuple<int, int>^>^, OpenCVWrappers::RawImage^>^>();
