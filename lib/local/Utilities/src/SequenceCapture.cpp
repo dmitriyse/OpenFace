@@ -467,6 +467,53 @@ cv::Mat SequenceCapture::GetNextFrame()
 	return latest_frame;
 }
 
+cv::Mat SequenceCapture::GetNextFrameNoPrepareGray()
+{
+
+	if (is_webcam || !is_image_seq)
+	{
+
+		bool success = capture.read(latest_frame);
+
+		if (!success)
+		{
+			// Indicate lack of success by returning an empty image
+			latest_frame = cv::Mat();
+		}
+
+		// Recording the timestamp
+		if (!is_webcam)
+		{
+			time_stamp = frame_num * (1.0 / fps);
+		}
+		else
+		{
+			time_stamp = (cv::getTickCount() - start_time) / cv::getTickFrequency();
+		}
+
+	}
+	else if (is_image_seq)
+	{
+		if (image_files.empty() || frame_num >= image_files.size())
+		{
+			// Indicate lack of success by returning an empty image
+			latest_frame = cv::Mat();
+		}
+		else
+		{
+			latest_frame = cv::imread(image_files[frame_num], CV_LOAD_IMAGE_COLOR);
+		}
+		time_stamp = 0;
+	}
+
+	// Set the grayscale frame
+	// ConvertToGrayscale_8bit(latest_frame, latest_gray_frame);
+
+	frame_num++;
+
+	return latest_frame;
+}
+
 double SequenceCapture::GetProgress()
 {
 	if (is_webcam)

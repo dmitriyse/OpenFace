@@ -79,6 +79,9 @@ namespace Utilities
 		// Getting the next frame
 		cv::Mat GetNextFrame();
 
+		// Getting the next frame without grayscale image preparation.
+		cv::Mat GetNextFrameNoPrepareGray();
+
 		// Getting the most recent grayscale frame (need to call GetNextFrame first)
 		cv::Mat_<uchar> GetGrayFrame();
 

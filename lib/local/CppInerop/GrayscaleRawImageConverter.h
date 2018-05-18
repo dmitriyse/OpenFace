@@ -1,6 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2017, Carnegie Mellon University and University of Cambridge,
-// all rights reserved.
+// Copyright (C) 2017, Tadas Baltrusaitis, all rights reserved.
 //
 // ACADEMIC OR NON-PROFIT ORGANIZATION NONCOMMERCIAL RESEARCH USE ONLY
 //
@@ -32,14 +31,70 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-// This is the main DLL file.
-#include "LandmarkDetectorInterop.h"
-#include "FaceAnalyserInterop.h"
-#include "GazeAnalyserInterop.h"
-#include "OpenCVWrappers.h"
-#include "ImageReader.h"
-#include "FaceDetectorInterop.h"
-#include "RecorderInterop.h"
-#include "VisualizerInterop.h"
-#include "SequenceReader.h"
-#include "GrayscaleRawImageConverter.h"
+#pragma once
+
+#pragma unmanaged
+
+// Include all the unmanaged things we need.
+
+#include <opencv2/core/core.hpp>
+#include "opencv2/objdetect.hpp"
+#include "opencv2/calib3d.hpp"
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <vector>
+#include <set>
+
+#include <OpenCVWrappers.h>
+#include "ImageManipulationHelpers.h"
+
+#pragma managed
+
+using namespace OpenCVWrappers;
+
+
+namespace UtilitiesOF {
+
+	public ref class GrayscaleRawImageConverter : System::IDisposable
+	{
+	private:
+
+		cv::Mat_<uchar> * gray_buffer;
+
+	public:
+
+		GrayscaleRawImageConverter()
+		{
+			gray_buffer = new cv::Mat_<uchar>();
+		}
+
+		RawImage ^ Convert(RawImage^ colorImage) {
+			Utilities::ConvertToGrayscale_8bit(colorImage->Mat, *gray_buffer);
+
+			auto gray_frame = gcnew OpenCVWrappers::RawImage(gray_buffer->size().width, gray_buffer->size().width, CV_8UC3);
+
+			gray_buffer->copyTo(gray_frame->Mat);
+
+			return gray_frame;
+		}
+
+		// Finalizer. Definitely called before Garbage Collection,
+		// but not automatically called on explicit Dispose().
+		// May be called multiple times.
+		!GrayscaleRawImageConverter()
+		{
+			// Automatically closes capture object before freeing memory.	
+			if (gray_buffer != nullptr)
+			{
+				delete gray_buffer;
+			}
+		}
+
+		// Destructor. Called on explicit Dispose() only.
+		~GrayscaleRawImageConverter()
+		{
+			this->!GrayscaleRawImageConverter();
+		}
+	};
+}

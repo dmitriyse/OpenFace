@@ -176,6 +176,7 @@
   <ItemGroup>
     <ClInclude Include="FaceAnalyserInterop.h" />
     <ClInclude Include="GazeAnalyserInterop.h" />
+    <ClInclude Include="GrayscaleRawImageConverter.h" />
     <ClInclude Include="ImageReader.h" />
     <ClInclude Include="LandmarkDetectorInterop.h" />
     <ClInclude Include="FaceDetectorInterop.h" />

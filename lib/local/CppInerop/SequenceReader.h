@@ -172,6 +172,17 @@ namespace UtilitiesOF {
 			return m_rgb_frame;
 		}
 
+		OpenCVWrappers::RawImage^ GetNextImageWithCloneNoGray()
+		{
+			cv::Mat next_image = m_sequence_capture->GetNextFrameNoPrepareGray();
+
+			auto rgb_frame = gcnew OpenCVWrappers::RawImage(next_image.size().width, next_image.size().width, CV_8UC3);
+
+			next_image.copyTo(rgb_frame->Mat);
+
+			return rgb_frame;
+		}
+
 		double GetTimestamp()
 		{
 			return m_sequence_capture->time_stamp;
