@@ -234,6 +234,27 @@ namespace UtilitiesOF {
 			return m_sequence_capture->fps;
 		}
 
+		int GetFrameWidth()
+		{
+			return m_sequence_capture->frame_width;
+		}
+
+		int GetFrameHeight()
+		{
+			return m_sequence_capture->frame_height;
+		}
+
+		int GetFramesCount()
+		{
+			return m_sequence_capture->GetFramesCount();
+		}
+
+		int GetFrameNumber()
+		{
+			return m_sequence_capture->GetFrameNumber();
+		}
+
+
 		OpenCVWrappers::RawImage^ GetCurrentFrameGray() {
 
 			cv::Mat next_gray_image = m_sequence_capture->GetGrayFrame();

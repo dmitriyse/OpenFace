@@ -230,6 +230,12 @@ namespace OpenCVWrappers {
 			return gcnew WriteableBitmap(Width, Height, 72, 72, Format, nullptr);
 		}
 
+		bool ImWrite(System::String^ out_file) {
+			msclr::interop::marshal_context context;
+			std::string out_file_std_string = context.marshal_as<std::string>(out_file);
+			return cv::imwrite(out_file_std_string, this->Mat);
+		};
+
 	};
 
 	public ref class VideoWriter

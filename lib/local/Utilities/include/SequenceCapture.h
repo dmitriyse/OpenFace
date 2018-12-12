@@ -90,6 +90,8 @@ namespace Utilities
 
 		int GetFrameNumber() { return frame_num; }
 
+		int GetFramesCount() { return vid_length; }
+
 		bool IsOpened();
 
 		void Close();
